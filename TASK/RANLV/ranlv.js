@@ -1,11 +1,11 @@
 /*
-tgchannel：https://t.me/Arisy_Script
-github：https://github.com/Arisy/script
-boxjs：https://raw.githubusercontent.com/Arisy/Private-Script/master/Arisy.boxjs.json
+tgchannel：https://t.me/Ariszy_Script
+github：https://github.com/Ariszy/script
+boxjs：https://raw.githubusercontent.com/Ariszy/Private-Script/master/Ariszy.boxjs.json
 转载留个名字，谢谢
 邀请码：190512
 谢谢
-作者：执意Arisy
+作者：执意Ariszy
 #看一个视频获取ck
 目前包含：
 看视频奖励、分享奖励
@@ -15,19 +15,19 @@ boxjs：https://raw.githubusercontent.com/Arisy/Private-Script/master/Arisy.boxj
 hostname = ranlv.lvfacn.com
 #圈x 
 [rewrite local]
-https://ranlv.lvfacn.com/api.php/Common/pvlog url script-request-header https://raw.githubusercontent.com/Arisy/Private-Script/master/Scripts/ranlv.js
+https://ranlv.lvfacn.com/api.php/Common/pvlog url script-request-header https://raw.githubusercontent.com/Ariszy/Private-Script/master/Scripts/ranlv.js
 
 
 #loon
-http-request https://ranlv.lvfacn.com/api.php/Common/pvlog script-path=https://raw.githubusercontent.com/Arisy/Private-Script/master/Scripts/ranlv.js, requires-body=true, timeout=10, tag=燃旅视频
+http-request https://ranlv.lvfacn.com/api.php/Common/pvlog script-path=https://raw.githubusercontent.com/Ariszy/Private-Script/master/Scripts/ranlv.js, requires-body=true, timeout=10, tag=燃旅视频
 
 
 #surge
-燃旅视频 = type=http-request,pattern=^https://ranlv.lvfacn.com/api.php/Common/pvlog,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Arisy/Private-Script/master/Scripts/ranlv.js,script-update-interval=0
+燃旅视频 = type=http-request,pattern=^https://ranlv.lvfacn.com/api.php/Common/pvlog,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Ariszy/Private-Script/master/Scripts/ranlv.js,script-update-interval=0
 
 */
-const Arisy = '燃旅视频'
-const $ = Env(Arisy)
+const Ariszy = '燃旅视频'
+const $ = Env(Ariszy)
 const notify = $.isNode() ?require('./sendNotify') : '';
 let status, videoid,myid,supportvideoid,supportrank,show;
 status = (status = ($.getval("rlstatus") || "1") ) > 1 ? `${status}` : ""; // 账号扩展字符
@@ -131,11 +131,11 @@ function GetCookie() {
 if($request&&$request.url.indexOf("Common/pvlog")>=0) {
    const rlurl = $request.url.split('?')[1]
    if(rlurl)     $.setdata(rlurl,`rlurl${status}`)
-   $.log(`[${Arisy}] 获取rlurl请求: 成功,rlurl: ${rlurl}`)
+   $.log(`[${Ariszy}] 获取rlurl请求: 成功,rlurl: ${rlurl}`)
    $.msg(`rlurl${status}: 成功🎉`, ``)
    const rlheader = JSON.stringify($request.headers)
     if(rlheader)    $.setdata(rlheader,`rlheader${status}`)
-    $.log(`[${Arisy}] 获取rlheader请求: 成功,rlheader: ${rlheader}`)
+    $.log(`[${Ariszy}] 获取rlheader请求: 成功,rlheader: ${rlheader}`)
     $.msg(`rlheader${status}: 成功🎉`, ``)
 }
 }
@@ -472,7 +472,7 @@ async function wiTask(){
         }
         if(praiseArr.to_num >= praiseArr.num && commentArr.to_num >= commentArr.num && commentArr.to_num >= commentArr.num){
         note += '提现任务已完成'
-        $.log(Arisy,'',note)
+        $.log(Ariszy,'',note)
         }
         }
         }catch(e) {
@@ -865,7 +865,7 @@ if(tz==1){
    }else{
      $.log(message+note)
     //if ((hour == 12 && minute <= 20) || (hour == 23 && minute >= 40)) {
-       $.msg(Arisy,'',message+note)
+       $.msg(Ariszy,'',message+note)
 //}
 }
    }else{

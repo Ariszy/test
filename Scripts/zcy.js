@@ -1,11 +1,11 @@
 /*
-tgchannel：https://t.me/Arisy8028
-github：https://github.com/Arisy/script
-boxjs：https://raw.githubusercontent.com/Arisy/Private-Script/master/Arisy.boxjs.json
+tgchannel：https://t.me/Ariszy8028
+github：https://github.com/Ariszy/script
+boxjs：https://raw.githubusercontent.com/Ariszy/Private-Script/master/Ariszy.boxjs.json
 转载留个名字，谢谢
 邀请码：6EYH02
 谢谢
-作者：执意Arisy
+作者：执意Ariszy
 目前只有走路，看视频
 脚本初成，非专业人士制作，欢迎指正
 #在首页刷新步数记录获取ck zcyheader和zcybody
@@ -13,11 +13,11 @@ boxjs：https://raw.githubusercontent.com/Arisy/Private-Script/master/Arisy.boxj
 hostname = step-money.quanxiangweilai.cn
 #圈x
 [rewrite local]
-https:\/\/step-money\.quanxiangweilai\.cn\/api\/step_count\/sync url script-request-body https://raw.githubusercontent.com/Arisy/Private-Script/master/Scripts/zcy.js
+https:\/\/step-money\.quanxiangweilai\.cn\/api\/step_count\/sync url script-request-body https://raw.githubusercontent.com/Ariszy/Private-Script/master/Scripts/zcy.js
 #loon
-http-request https:\/\/step-money\.quanxiangweilai\.cn\/api\/step_count\/sync script-path=https://raw.githubusercontent.com/Arisy/Private-Script/master/Scripts/zcy.js, requires-body=true, timeout=10, tag=走财运
+http-request https:\/\/step-money\.quanxiangweilai\.cn\/api\/step_count\/sync script-path=https://raw.githubusercontent.com/Ariszy/Private-Script/master/Scripts/zcy.js, requires-body=true, timeout=10, tag=走财运
 #surge
-走财运 = type=http-request,pattern=https:\/\/step-money\.quanxiangweilai\.cn\/api\/step_count\/sync,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Arisy/Private-Script/master/Scripts/zcy.js,script-update-interval=0
+走财运 = type=http-request,pattern=https:\/\/step-money\.quanxiangweilai\.cn\/api\/step_count\/sync,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Ariszy/Private-Script/master/Scripts/zcy.js,script-update-interval=0
 */
 const jsname = '走财运'
 const $ = Env(jsname)

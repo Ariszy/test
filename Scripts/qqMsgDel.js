@@ -1,36 +1,19 @@
 /*
-tgchannel：https://t.me/Ariszy_Script
-github：https://github.com/Ariszy/script
-boxjs：https://raw.githubusercontent.com/Ariszy/Private-Script/master/Ariszy.boxjs.json
-转载留个名字，谢谢
-邀请码：######
-谢谢
-作者：执意Ariszy
-#打卡一次获取ck成功
+https://h5.qzone.qq.com/message/index? url script-request-header qqMsgDel.js
+https://h5.qzone.qq.com/webapp/json/get_message_list/getApplist? url script-request-body qqMsgDel.js
 
-[mitm]
-hostname = node.52tt.com
-#圈x
-[rewrite local]
-https://node.52tt.com/activity-production/new-user-month-checkin/activity.Checkin/checkin url script-request-body https://raw.githubusercontent.com/Ariszy/Private-Script/master/Scripts/TT.js
-
-
-#loon
-http-request https://node.52tt.com/activity-production/new-user-month-checkin/activity.Checkin/checkin script-path=https://raw.githubusercontent.com/Ariszy/Private-Script/master/Scripts/TT.js, requires-body=true, timeout=10, tag=TT语音
-
-
-#surge
-TT语音 = type=http-request,pattern=https://node.52tt.com/activity-production/new-user-month-checkin/activity.Checkin/checkin,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Ariszy/Private-Script/master/Scripts/TT.js,script-update-interval=0
-
+hostname = h5.qzone.qq.com
 */
-
-const $ = new Env('TT语音')
+const $ = new Env('qq空间批量删除留言')
 const notify = $.isNode() ?require('./sendNotify') : '';
 let status;
-status = (status = ($.getval("TTstatus") || "1") ) > 1 ? `${status}` : ""; // 账号扩展字符
-const TTreferArr = [],TTbodyArr = []
-let TTrefer = $.getdata('TTrefer')
-let TTbody= $.getdata('TTbody')
+var listArr,msgs;
+status = (status = ($.getval("cglmstatus") || "1") ) > 1 ? `${status}` : ""; // 账号扩展字符
+let qqdelurl = $.getdata('qqdelurl')
+let qqlisturl = $.getdata('qqlisturl')
+let qqdelheader = $.getdata('qqdelheader')
+let qqlistheader = $.getdata('qqlistheader')
+let qqlistbody = $.getdata('qqlistbody')
 let tz = ($.getval('tz') || '1');//0关闭通知，1默认开启
 const invite=1;//新用户自动邀请，0关闭，1默认开启
 const logs =0;//0为关闭日志，1为开启
@@ -49,104 +32,59 @@ if (isGetCookie) {
    GetCookie();
    $.done()
 } 
-if ($.isNode()) {
-   if (process.env.TTREFER && process.env.TTREFER .indexOf('#') > -1) {
-   TTrefer = process.env.TTREFER .split('#');
-   console.log(`您选择的是用"#"隔开\n`)
-  }
-  else if (process.env.TTREFER && process.env.TTREFER .indexOf('\n') > -1) {
-   TTrefer = process.env.TTREFER .split('\n');
-   console.log(`您选择的是用换行隔开\n`)
-  } else {
-   TTrefer = process.env.TTREFER .split()
-  };
-  if (process.env.TTBODY&& process.env.TTBODY.indexOf('#') > -1) {
-   TTbody= process.env.TTBODY.split('#');
-   console.log(`您选择的是用"#"隔开\n`)
-  }
-  else if (process.env.TTBODY&& process.env.TTBODY.indexOf('\n') > -1) {
-   TTbody= process.env.TTBODY.split('\n');
-   console.log(`您选择的是用换行隔开\n`)
-  } else {
-   TTbody= process.env.TTBODY.split()
-  };
-    console.log(`============ 脚本执行-国际标准时间(UTC)：${new Date().toLocaleString()}  =============\n`)
-    console.log(`============ 脚本执行-北京时间(UTC+8)：${new Date(new Date().getTime() + 8 * 60 * 60 * 1000).toLocaleString()}  =============\n`)
- } else {
-    TTreferArr.push($.getdata('TTrefe'))
-    TTbodyArr.push($.getdata('TTbody'))
-    let TTcount = ($.getval('TTcount') || '1');
-  for (let i = 2; i <= TTcount; i++){
-    TTreferArr.push($.getdata(`TTrefer${i}`))
-    TTbodyArr.push($.getdata(`TTbody${i}`))
-  }
-}
+
 !(async () => {
-if (!TTreferArr[0] && !TTbodyArr[0] ) {
-    $.msg($.name, '【提示】请先获取TT语音一cookie')
+if (!qqlistheader) {
+    $.msg($.name, '【提示】请先获取Cookie')
     return;
   }
-   console.log(`------------- 共${TTbodyArr.length}个账号----------------\n`)
-  for (let i = 0; i < TTbodyArr.length; i++) {
-    if (TTbodyArr[i]) {
-      message = ''
-      TTrefer= TTreferArr[i];
-      TTbody = TTbodyArr[i];
-      $.index = i + 1;
-      console.log(`\n开始【TT语音${$.index}】`)
-      await checkin() 
-      await showmsg()
-  }
- }
+      console.log(`\n开始【删除qq留言】`)
+      await list()
 })()
     .catch((e) => $.logErr(e))
     .finally(() => $.done())
     
     
 function GetCookie() {
-if($request&&$request.url.indexOf("checkin")>=0) {
-   const TTrefer = $request.headers['Referer']
-   if(TTrefer)     $.setdata(TTrefer,`TTrefer${status}`)
-   $.log(`[${$.jsname}] 获取TTrefer请求: 成功,TTrefer: ${TTrefer}`)
-   $.msg(`TTrefer${status}: 成功🎉`, ``)
-   const TTbody= $request.body
-    if(TTbody)    $.setdata(TTbody,`TTbody${status}`)
-    $.log(`[${$.jsname}] 获取TTbody请求: 成功,TTbody: ${TTbody}`)
-    $.msg(`TTbody${status}: 成功🎉`, ``)
+if($request&&$request.url.indexOf("message/index")>=0) {
+   const qqdelurl = $request.url.split(`?`)[1]
+    if(qqdelurl)    $.setdata(qqdelurl,`qqdelurl`)
+    $.log(`[${$.jsname}] 获取qqdelurl请求: 成功,qqdelurl: ${qqdelurl}`)
+    $.msg(`qqdelurl: 成功🎉`, ``)
+
+
+}
+if($request&&$request.url.indexOf("get_message_list/getApplist")>=0) {
+   const qqlisturl = $request.url.split(`?`)[1]
+    if(qqlisturl)    $.setdata(qqlisturl,`qqlisturl`)
+    $.log(`[${$.jsname}] 获取qqlisturl请求: 成功,qqlisturl: ${qqlisturl}`)
+    $.msg(`qqlisturl: 成功🎉`, ``)
+const qqlistheader = JSON.stringify($request.headers)
+    if(qqlistheader)    $.setdata(qqlistheader,`qqlistheader`)
+    $.log(`[${$.jsname}] 获取qqlistheader请求: 成功,qqlistheader: ${qqlistheader}`)
+    $.msg(`qqlistheader: 成功🎉`, ``)
+   const qqlistbody = $request.body
+   if(qqlistbody) $.setdata(qqlistbody,`qqlistbody`)
+     $.log(`[${$.jsname}] 获取qqlistbody请求: 成功,qqlistbody: ${qqlistbody}`)
+    $.msg(`qqlistbody: 成功🎉`, ``)
 }
 }
-//checkin
-async function checkin(){
+async function list(){
  return new Promise((resolve) => {
-    let checkin_url = {
-   	url: `https://node.52tt.com/activity-production/new-user-month-checkin/activity.Checkin/checkin`,
-    	headers: {
-       'Accept': '*/*',
-       'Accept-Encoding': 'gzip,deflate,br',
-       'Accept-Language': 'zh-cn',
-       'Connection': 'keep-alive',
-       'Content-Type': 'application/json',
-       'Host': 'node.52tt.com',
-       'Origin': 'http://appcdn.52tt.com',
-       'Referer': `${TTrefer}`,
-       'User-Agent': `Mozilla/5.0 (iPhone; CPU iPhone OS 13_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 TT/5.5.6 NetType/Wifi`
-       },
-    	body: TTbody
-    	}
-   $.post(checkin_url,async(error, response, data) =>{
+    let list_url = {
+   		url: `https://h5.qzone.qq.com/webapp/json/get_message_list/getApplist?${qqlisturl}`,
+        headers: JSON.parse(qqlistheader),
+        body: qqlistbody
+   	}
+   $.post(list_url,async(error, response, data) =>{
     try{
         const result = JSON.parse(data)
         if(logs)$.log(data)
-        if(result.code == 0){
-         for(let i = 0; i < 29; i++){
-         let day = result.data.record.i == 0 ? (i -1) : i
-         }
-	  console.log(`打卡成功：累计获得${result.data.curMoney}元\n`)
-          message += `打卡成功：累计获得${result.data.curMoney}元`
-        }else if(result.code == 2){
-        console.log(result.msg+`\n`)
-        message += result.msg
-        }
+        if(result.ret == 0){
+        listArr = data.match(/cellid":"\d+/g)
+        await control()
+}
+          
         }catch(e) {
           $.logErr(e, response);
       } finally {
@@ -154,8 +92,47 @@ async function checkin(){
       } 
     })
    })
+  } 
+
+async function deletes(cellid){
+let url = qqdelurl.replace(/cellid=\d+/,`cellid=`+cellid)
+ return new Promise((resolve) => {
+    let deletes_url = {
+   		url: `https://h5.qzone.qq.com/message/index?${url}`,
+        headers: JSON.parse(qqlistheader),
+   	}
+   $.get(deletes_url,async(error, response, data) =>{
+    try{
+        const result = JSON.parse(data)
+        $.log(data)
+        if(result.data.ret == 0){
+          $.log("删除成功\n")
+          //await list()
+        }
+        else
+          $.log(result.data.msg+"\n")
+        }catch(e) {
+          $.logErr(e, response);
+      } finally {
+        resolve();
+      } 
+    })
+   })
+  } 
+async function control(){
+for(let i = 0; i < listArr.length; i++){
+let lists = listArr[i].replace(/cellid":"/,"")
+//let msged = msgs[i+1].replace(/summary": "/,"")
+$.log("开始删除"+lists+"\n")
+await $.wait(1000)
+await deletes(lists)
 }
+}
+
+
 //showmsg
+//boxjs设置tz=1，在12点<=20和23点>=40时间段通知，其余时间打印日志
+
 async function showmsg() {
     if (tz == 1) {
       if ($.isNode()) {
@@ -166,7 +143,7 @@ async function showmsg() {
         }
       } else {
         if ((hour == 12 && minute <= 20) || (hour == 23 && minute >= 40)) {
-          $.msg($.jsname, '', message)
+          $.msg(zhiyi, '', message)
         } else {
           $.log(message)
         }

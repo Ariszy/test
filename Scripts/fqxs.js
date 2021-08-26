@@ -1,10 +1,11 @@
 /*
-tgchannel：https://t.me/Ariszy_Script
+tgchannel：https://t.me/Ariszy8028
 github：https://github.com/Ariszy/script
 boxjs：https://raw.githubusercontent.com/Ariszy/Private-Script/master/Ariszy.boxjs.json
 转载留个名字，谢谢
 邀请码：7672016831
 谢谢
+版本3.5.0
 作者：执意Ariszy
 #签到界面或者签到详情
 #读书任务可以完成，时长上传没做好，广告偶尔可以
@@ -23,9 +24,7 @@ http-request luckycat/novel/v1/task/sign_in/* script-path=https://raw.githubuser
 🍅番茄小说 = type=http-request,pattern=luckycat/novel/v1/task/sign_in/*,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Ariszy/Private-Script/master/Scripts/fqxs.js,script-update-interval=0
 
 */
-
-const Ariszy = '🍅番茄小说'
-const $ = Env(Ariszy)
+const $ = new Env('🍅番茄小说')
 const notify = $.isNode() ?require('./sendNotify') : '';
 let status,no;
 status = (status = ($.getval("fqxsstatus") || "1") ) > 1 ? `${status}` : ""; // 账号扩展字符
@@ -109,14 +108,14 @@ function fqxsck() {
 if($request&&$request.url.indexOf("sign_in")>=0) {
    const fqxsurl = $request.url.split('?')[1]
    if(fqxsurl)     $.setdata(fqxsurl,`fqxsurl${status}`)
-   $.log(`[${Ariszy}] 获取fqxsurl请求: 成功,fqxsurl: ${fqxsurl}`)
+   $.log(`[${$.jsname}] 获取fqxsurl请求: 成功,fqxsurl: ${fqxsurl}`)
    $.msg(`fqxsurl${status}: 成功🎉`, ``)
    const host = $request.headers['Host']
    if(host)   $.setdata(host,'host')
-   $.log(`[${Ariszy}] 获取host请求: 成功,host: ${host}`)
+   $.log(`[${$.jsname}] 获取host请求: 成功,host: ${host}`)
    const fqxs = JSON.stringify($request.headers)
     if(fqxs)    $.setdata(fqxs,`fqxs${status}`)
-    $.log(`[${Ariszy}] 获取fqxs请求: 成功,fqxs: ${fqxs}`)
+    $.log(`[${$.jsname}] 获取fqxs请求: 成功,fqxs: ${fqxs}`)
     $.msg(`fqxs${status}: 成功🎉`, ``)
 }
 }
@@ -294,7 +293,7 @@ async function showmsg(){
    if ($.isNode()){
        await notify.sendNotify($.name,message)
    }else{
-       $.msg(Ariszy,'',message+note)
+       $.msg($.jsname,'',message+note)
    }
   }else{
        console.log(message+note)

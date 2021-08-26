@@ -1,5 +1,5 @@
 /*
-tgchannel：https://t.me/Ariszy_Script
+tgchannel：https://t.me/Ariszy_Scripts
 github：https://github.com/Ariszy/script
 boxjs：https://raw.githubusercontent.com/Ariszy/Private-Script/master/Ariszy.boxjs.json
 转载留个名字，谢谢
@@ -26,8 +26,7 @@ http-request https://ranlv.lvfacn.com/api.php/Common/pvlog script-path=https://r
 燃旅视频 = type=http-request,pattern=^https://ranlv.lvfacn.com/api.php/Common/pvlog,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Ariszy/Private-Script/master/Scripts/ranlv.js,script-update-interval=0
 
 */
-const Ariszy = '燃旅视频'
-const $ = Env(Ariszy)
+const $ = new Env('燃旅视频')
 const notify = $.isNode() ?require('./sendNotify') : '';
 let status, videoid,myid,supportvideoid,supportrank,show;
 status = (status = ($.getval("rlstatus") || "1") ) > 1 ? `${status}` : ""; // 账号扩展字符
@@ -131,11 +130,11 @@ function GetCookie() {
 if($request&&$request.url.indexOf("Common/pvlog")>=0) {
    const rlurl = $request.url.split('?')[1]
    if(rlurl)     $.setdata(rlurl,`rlurl${status}`)
-   $.log(`[${Ariszy}] 获取rlurl请求: 成功,rlurl: ${rlurl}`)
+   $.log(`[${$.jsname}] 获取rlurl请求: 成功,rlurl: ${rlurl}`)
    $.msg(`rlurl${status}: 成功🎉`, ``)
    const rlheader = JSON.stringify($request.headers)
     if(rlheader)    $.setdata(rlheader,`rlheader${status}`)
-    $.log(`[${Ariszy}] 获取rlheader请求: 成功,rlheader: ${rlheader}`)
+    $.log(`[${$.jsname}] 获取rlheader请求: 成功,rlheader: ${rlheader}`)
     $.msg(`rlheader${status}: 成功🎉`, ``)
 }
 }
@@ -865,7 +864,7 @@ if(tz==1){
    }else{
      $.log(message+note)
     //if ((hour == 12 && minute <= 20) || (hour == 23 && minute >= 40)) {
-       $.msg(Ariszy,'',message+note)
+       $.msg($.jsname,'',message+note)
 //}
 }
    }else{

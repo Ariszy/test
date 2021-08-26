@@ -29,8 +29,7 @@ hotsoonsign = type=http-request,pattern=/luckycat/hotsoon/v1/task/sign_in_detail
 hotsoonad = type=http-request,pattern=/luckycat/hotsoon/v1/task/done/draw_excitation_ad?,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Ariszy/Private-Script/master/Scripts/hotsoon_old.js,script-update-interval=0
 hotsoonread = type=http-request,pattern=/luckycat/hotsoon/v1/task/done/daily_read_\d+m?,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Ariszy/Private-Script/master/Scripts/hotsoon_old.js,script-update-interval=0
 */
-const jsname='火山视频极速版'
-const $ = Env(jsname)
+const $ = new Env('火山视频极速版')
 const notify = $.isNode() ?require('./sendNotify') : '';
 $.idx = ($.idx = ($.getval("hotsooncount") || "1") - 1) > 0 ? `${$.idx + 1}` : ""; // 账号扩展字符
 const hotsoonsignheaderArr = [],hotsoonsignkeyArr=[]
@@ -207,31 +206,31 @@ function GetCookie() {
  if($request&&$request.url.indexOf("hotsoon"&&"sign_in_detail")>=0) {
   const hotsoonsignheader = $request.url.split(`?`)[1]
     if (hotsoonsignheader) $.setdata(hotsoonsignheader,`hotsoonsignheader${$.idx}`)
-    $.log(`[${jsname}] 获取sign请求: 成功,hotsoonsignheader: ${hotsoonsignheader}`)
+    $.log(`[${$.jsname}] 获取sign请求: 成功,hotsoonsignheader: ${hotsoonsignheader}`)
     $.msg(`获取hotsoonsignheader: 成功🎉`, ``)
    const hotsoonsignkey = JSON.stringify($request.headers)
   if(hotsoonsignkey)        $.setdata(hotsoonsignkey,`hotsoonsignkey${$.idx}`)
-    $.log(`[${jsname}] 获取sign请求: 成功,hotsoonsignkey: ${hotsoonsignkey}`)
+    $.log(`[${$.jsname}] 获取sign请求: 成功,hotsoonsignkey: ${hotsoonsignkey}`)
     $.msg(`获取hotsoonsignkey: 成功🎉`, ``)
  }
  if($request&&$request.url.indexOf('hotsoon'&&"daily_read")>=0) {
 	  const hotsoonreadheader = $request.url.split(`?`)[1]
 	    if (hotsoonreadheader) $.setdata(hotsoonreadheader,`hotsoonreadheader${$.idx}`)
-	    $.log(`[${jsname}] 获取read请求: 成功,hotsoonreadheader: ${hotsoonreadheader}`)
+	    $.log(`[${$.jsname}] 获取read请求: 成功,hotsoonreadheader: ${hotsoonreadheader}`)
 	    $.msg(`获取hotsoonreadheader: 成功🎉`, ``)
 	   const hotsoonreadkey = JSON.stringify($request.headers)
 	  if(hotsoonreadkey)        $.setdata(hotsoonreadkey,`hotsoonreadkey${$.idx}`)
-	    $.log(`[${jsname}] 获取read请求: 成功,readkey: ${hotsoonreadkey}`)
+	    $.log(`[${$.jsname}] 获取read请求: 成功,readkey: ${hotsoonreadkey}`)
 	    $.msg(`获取hotsoonreadkey: 成功🎉`, ``)
 	 }
  if($request&&$request.url.indexOf('hotsoon' && "draw_excitation_ad")>=0) {
 	  const hotsoonadheader = $request.url.split(`?`)[1]
 	    if (hotsoonadheader) $.setdata(hotsoonadheader,`hotsoonadheader${$.idx}`)
-	    $.log(`[${jsname}] 获取AD请求: 成功,hotsoonadheader: ${hotsoonadheader}`)
+	    $.log(`[${$.jsname}] 获取AD请求: 成功,hotsoonadheader: ${hotsoonadheader}`)
 	    $.msg(`获取hotsoonadheader: 成功🎉`, ``)
 	   const hotsoonadkey = JSON.stringify($request.headers)
 	  if(hotsoonadkey)        $.setdata(hotsoonadkey,`hotsoonadkey${$.idx}`)
-	    $.log(`[${jsname}] 获取AD请求: 成功,hotsoonadkey: ${hotsoonadkey}`)
+	    $.log(`[${$.jsname}] 获取AD请求: 成功,hotsoonadkey: ${hotsoonadkey}`)
 	    $.msg(`获取hotsoonadkey: 成功🎉`, ``)
 	 }
     }
@@ -444,7 +443,7 @@ if(tz==1){
    }else{
       $.log(message)
     if ((hour == 12 && minute <= 20) || (hour == 23 && minute >= 40)) {
-       $.msg(jsname,'',message)
+       $.msg($.jsname,'',message)
 }
 }
    }else{

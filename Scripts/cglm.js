@@ -1,36 +1,11 @@
-/*
-tgchannel：https://t.me/Ariszy_Script
-github：https://github.com/Ariszy/script
-boxjs：https://raw.githubusercontent.com/Ariszy/Private-Script/master/Ariszy.boxjs.json
-转载留个名字，谢谢
-邀请码：######
-谢谢
-作者：执意Ariszy
-#打卡一次获取ck成功
 
-[mitm]
-hostname = node.52tt.com
-#圈x
-[rewrite local]
-https://node.52tt.com/activity-production/new-user-month-checkin/activity.Checkin/checkin url script-request-body https://raw.githubusercontent.com/Ariszy/Private-Script/master/Scripts/TT.js
-
-
-#loon
-http-request https://node.52tt.com/activity-production/new-user-month-checkin/activity.Checkin/checkin script-path=https://raw.githubusercontent.com/Ariszy/Private-Script/master/Scripts/TT.js, requires-body=true, timeout=10, tag=TT语音
-
-
-#surge
-TT语音 = type=http-request,pattern=https://node.52tt.com/activity-production/new-user-month-checkin/activity.Checkin/checkin,requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/Ariszy/Private-Script/master/Scripts/TT.js,script-update-interval=0
-
-*/
-
-const $ = new Env('TT语音')
+const $ =  new Env('猜歌联萌')
 const notify = $.isNode() ?require('./sendNotify') : '';
 let status;
-status = (status = ($.getval("TTstatus") || "1") ) > 1 ? `${status}` : ""; // 账号扩展字符
-const TTreferArr = [],TTbodyArr = []
-let TTrefer = $.getdata('TTrefer')
-let TTbody= $.getdata('TTbody')
+let num = 21;
+status = (status = ($.getval("cglmstatus") || "1") ) > 1 ? `${status}` : ""; // 账号扩展字符
+cglmheaderArr = []
+let cglmheader = $.getdata('cglmheader')
 let tz = ($.getval('tz') || '1');//0关闭通知，1默认开启
 const invite=1;//新用户自动邀请，0关闭，1默认开启
 const logs =0;//0为关闭日志，1为开启
@@ -49,53 +24,33 @@ if (isGetCookie) {
    GetCookie();
    $.done()
 } 
-if ($.isNode()) {
-   if (process.env.TTREFER && process.env.TTREFER .indexOf('#') > -1) {
-   TTrefer = process.env.TTREFER .split('#');
-   console.log(`您选择的是用"#"隔开\n`)
+
+cglmheaderArr.push($.getdata('cglmheader'))
+    let cglmcount = ($.getval('cglmcount') || '1');
+  for (let i = 2; i <= cglmcount; i++) {
+    cglmheaderArr.push($.getdata(`cglmheader${i}`))
   }
-  else if (process.env.TTREFER && process.env.TTREFER .indexOf('\n') > -1) {
-   TTrefer = process.env.TTREFER .split('\n');
-   console.log(`您选择的是用换行隔开\n`)
-  } else {
-   TTrefer = process.env.TTREFER .split()
-  };
-  if (process.env.TTBODY&& process.env.TTBODY.indexOf('#') > -1) {
-   TTbody= process.env.TTBODY.split('#');
-   console.log(`您选择的是用"#"隔开\n`)
-  }
-  else if (process.env.TTBODY&& process.env.TTBODY.indexOf('\n') > -1) {
-   TTbody= process.env.TTBODY.split('\n');
-   console.log(`您选择的是用换行隔开\n`)
-  } else {
-   TTbody= process.env.TTBODY.split()
-  };
-    console.log(`============ 脚本执行-国际标准时间(UTC)：${new Date().toLocaleString()}  =============\n`)
-    console.log(`============ 脚本执行-北京时间(UTC+8)：${new Date(new Date().getTime() + 8 * 60 * 60 * 1000).toLocaleString()}  =============\n`)
- } else {
-    TTreferArr.push($.getdata('TTrefe'))
-    TTbodyArr.push($.getdata('TTbody'))
-    let TTcount = ($.getval('TTcount') || '1');
-  for (let i = 2; i <= TTcount; i++){
-    TTreferArr.push($.getdata(`TTrefer${i}`))
-    TTbodyArr.push($.getdata(`TTbody${i}`))
-  }
-}
 !(async () => {
-if (!TTreferArr[0] && !TTbodyArr[0] ) {
-    $.msg($.name, '【提示】请先获取TT语音一cookie')
+if (!cglmheaderArr[0]) {
+    $.msg($.name, '【提示】请先获取猜歌联萌一cookie')
     return;
   }
-   console.log(`------------- 共${TTbodyArr.length}个账号----------------\n`)
-  for (let i = 0; i < TTbodyArr.length; i++) {
-    if (TTbodyArr[i]) {
+   console.log(`------------- 共${cglmheaderArr.length}账号----------------\n`)
+  for (let i = 0; i < cglmheaderArr.length; i++) {
+    if (cglmheaderArr[i]) {
       message = ''
-      TTrefer= TTreferArr[i];
-      TTbody = TTbodyArr[i];
+      let turn = 0;
+      cglmheader = cglmheaderArr[i];
       $.index = i + 1;
-      console.log(`\n开始【TT语音${$.index}】`)
-      await checkin() 
-      await showmsg()
+      console.log(`\n开始【猜歌联萌${$.index}】`)
+do{
+      await passstage()
+      await dailycashvideo()
+      await $.wait(300)
+      turn++;
+}while(turn < num)
+      await postalv2()
+      await postalv3()
   }
  }
 })()
@@ -104,49 +59,28 @@ if (!TTreferArr[0] && !TTbodyArr[0] ) {
     
     
 function GetCookie() {
-if($request&&$request.url.indexOf("checkin")>=0) {
-   const TTrefer = $request.headers['Referer']
-   if(TTrefer)     $.setdata(TTrefer,`TTrefer${status}`)
-   $.log(`[${$.jsname}] 获取TTrefer请求: 成功,TTrefer: ${TTrefer}`)
-   $.msg(`TTrefer${status}: 成功🎉`, ``)
-   const TTbody= $request.body
-    if(TTbody)    $.setdata(TTbody,`TTbody${status}`)
-    $.log(`[${$.jsname}] 获取TTbody请求: 成功,TTbody: ${TTbody}`)
-    $.msg(`TTbody${status}: 成功🎉`, ``)
+if($request&&$request.url.indexOf("passstage")>=0) {
+   
+   const cglmheader = JSON.stringify($request.headers)
+    if(cglmheader)    $.setdata(cglmheader,`cglmheader${status}`)
+    $.log(`[${$.jsname}] 获取cglmheader请求: 成功,cglmheader: ${cglmheader}`)
+    $.msg(`cglmheader${status}: 成功🎉`, ``)
 }
 }
-//checkin
-async function checkin(){
+
+async function passstage(){
  return new Promise((resolve) => {
-    let checkin_url = {
-   	url: `https://node.52tt.com/activity-production/new-user-month-checkin/activity.Checkin/checkin`,
-    	headers: {
-       'Accept': '*/*',
-       'Accept-Encoding': 'gzip,deflate,br',
-       'Accept-Language': 'zh-cn',
-       'Connection': 'keep-alive',
-       'Content-Type': 'application/json',
-       'Host': 'node.52tt.com',
-       'Origin': 'http://appcdn.52tt.com',
-       'Referer': `${TTrefer}`,
-       'User-Agent': `Mozilla/5.0 (iPhone; CPU iPhone OS 13_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 TT/5.5.6 NetType/Wifi`
-       },
-    	body: TTbody
-    	}
-   $.post(checkin_url,async(error, response, data) =>{
+    let passstage_url = {
+   		url: `https://www.xizai.com/ge/api/v1/cg/ga/passstage`,
+        headers: JSON.parse(cglmheader),
+        body: `{"gameCategory":4,"serNum":"20201102_1snkd","userAnswer":"A"}`
+   	}
+   $.post(passstage_url,async(error, response, data) =>{
     try{
         const result = JSON.parse(data)
         if(logs)$.log(data)
-        if(result.code == 0){
-         for(let i = 0; i < 29; i++){
-         let day = result.data.record.i == 0 ? (i -1) : i
-         }
-	  console.log(`打卡成功：累计获得${result.data.curMoney}元\n`)
-          message += `打卡成功：累计获得${result.data.curMoney}元`
-        }else if(result.code == 2){
-        console.log(result.msg+`\n`)
-        message += result.msg
-        }
+        if(result.code == 0)
+          $.log(result.msg+"获得"+result.coins+"钻石\n")
         }catch(e) {
           $.logErr(e, response);
       } finally {
@@ -154,8 +88,80 @@ async function checkin(){
       } 
     })
    })
-}
+  } 
+async function dailycashvideo(){
+ return new Promise((resolve) => {
+    let cashvideo_url = {
+   		url: `https://www.xizai.com/ge/api/v1/cg/dailycash/video`,
+        headers: JSON.parse(cglmheader),
+        body: `{}`
+   	}
+   $.post(cashvideo_url,async(error, response, data) =>{
+    try{
+        const result = JSON.parse(data)
+        if(logs)$.log(data)
+        if(result.code == 0)
+          $.log(result.msg+"观看"+result.amount+"\n")
+        }catch(e) {
+          $.logErr(e, response);
+      } finally {
+        resolve();
+      } 
+    })
+   })
+  } 
+
+
+async function postalv2(){
+ return new Promise((resolve) => {
+    let postalv2_url = {
+   		url: `https://www.xizai.com/ge/api/v1/cg/cash/postalv2`,
+        headers: JSON.parse(cglmheader),
+        body: `{"cashModel":"0.3-30","payType":1}`
+   	}
+   $.post(postalv2_url,async(error, response, data) =>{
+    try{
+        const result = JSON.parse(data)
+        if(logs)$.log(data)
+        if(result.code == 0)
+          $.log("提现"+result.msg+"\n")
+        else
+          $.log(result.msg+"\n")
+        }catch(e) {
+          $.logErr(e, response);
+      } finally {
+        resolve();
+      } 
+    })
+   })
+  } 
+//每日提现
+async function postalv3(){
+ return new Promise((resolve) => {
+    let postalv3_url = {
+   		url: `https://www.xizai.com/ge/api/v1/cg/dailycash/cash`,
+        headers: JSON.parse(cglmheader),
+        body: `{}`
+   	}
+   $.post(postalv3_url,async(error, response, data) =>{
+    try{
+        const result = JSON.parse(data)
+        if(logs)$.log(data)
+        if(result.code == 0)
+          $.log("提现"+result.msg+"\n")
+        else
+          $.log(result.msg+"\n")
+        }catch(e) {
+          $.logErr(e, response);
+      } finally {
+        resolve();
+      } 
+    })
+   })
+  } 
 //showmsg
+//boxjs设置tz=1，在12点<=20和23点>=40时间段通知，其余时间打印日志
+
 async function showmsg() {
     if (tz == 1) {
       if ($.isNode()) {
@@ -166,7 +172,7 @@ async function showmsg() {
         }
       } else {
         if ((hour == 12 && minute <= 20) || (hour == 23 && minute >= 40)) {
-          $.msg($.jsname, '', message)
+          $.msg(zhiyi, '', message)
         } else {
           $.log(message)
         }

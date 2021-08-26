@@ -1,6 +1,15 @@
-1��APP Store���ؽ���ͷ�����ٰ�
-2��Ȧx���� https://raw.githubusercontent.com/Ariszy/Private-Script/master/TASK/jrtt_rewrite.conf 
-3���ҵ�--ǩ�������� �����Һ���
-���Ϸ�ǩ����ǩ��������漴�ɻ�ȡǩ��cookie
-���Ϸ��ٲ�׬Ǯ����һ��ũ�����ɻ�ȡũ��cookie
-����ҳ��һƪ���£������µ�����һ�ȡ������cookie��������Ҫʱ��ϳ���
+1、APP Store下载今日头条极速版
+
+2、抓包打开右下角包宝箱及视频奖励，重放使用
+
+降级7.99版本
+
+1、使用jrtt.js脚本获取ck
+
+①上方签到或签到详情界面即可获取签到cookie
+
+②上方仲裁赚钱，进一次农场即可获取农场cookie
+
+③首页找一篇文章，读文章弹出金币获取读文章cookie（可能需要时间较长）
+
+#金币叠加
